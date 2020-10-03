@@ -1,7 +1,7 @@
 # Pequeno exemplo utilizando docker-compose e docker-swarm
 
-## Pasta exemplo1 - docker com docker-compose
-## Pasta exemplo2 - docker-swarm com docker-compose
+### Pasta exemplo1 - docker com docker-compose
+### Pasta exemplo2 - docker-swarm com docker-compose
 ### Diagrama do projeto
 ![Diagrama](img/workers.png)
 
