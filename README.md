@@ -1,10 +1,7 @@
 # Pequeno exemplo utilizando docker-swarm
 
-## Pequeno exemplo de estrutura docker-swarm.
-
 ### Diagrama do projeto
 ![Diagrama](img/workers.png)
-
 
 ### Imagem foi gerado com o [python-diagrama](https://diagrams.mingrammer.com/)
 ### Realizar as [instalações necessárias](https://diagrams.mingrammer.com/docs/getting-started/installation)
