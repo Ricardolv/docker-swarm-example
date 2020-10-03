@@ -1,10 +1,12 @@
-# Pequeno exemplo utilizando docker-swarm
+# Pequeno exemplo utilizando docker-compose e docker-swarm
 
+## Pasta exemplo1 - docker com docker-compose
+## Pasta exemplo2 - docker-swarm com docker-compose
 ### Diagrama do projeto
 ![Diagrama](img/workers.png)
 
-## Imagem foi gerada com o [python-diagrama](https://diagrams.mingrammer.com/)
-## Realizar as [instalações necessárias](https://diagrams.mingrammer.com/docs/getting-started/installation)
+### Imagem foi gerada com o [python-diagrama](https://diagrams.mingrammer.com/)
+### Realizar as [instalações necessárias](https://diagrams.mingrammer.com/docs/getting-started/installation)
 
 ### Exemplo de código diagram.py
 
