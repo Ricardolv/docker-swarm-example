@@ -3,11 +3,10 @@
 ### Diagrama do projeto
 ![Diagrama](img/workers.png)
 
-### Imagem foi gerado com o [python-diagrama](https://diagrams.mingrammer.com/)
-### Realizar as [instalações necessárias](https://diagrams.mingrammer.com/docs/getting-started/installation)
+## Imagem foi gerada com o [python-diagrama](https://diagrams.mingrammer.com/)
+## Realizar as [instalações necessárias](https://diagrams.mingrammer.com/docs/getting-started/installation)
 
-
-## Exemplo de código diagram.py
+### Exemplo de código diagram.py
 
 ``` python
 from diagrams import Diagram, Cluster
@@ -43,7 +42,7 @@ with Diagram("Workers", show=False, direction="TB"):
 
     postgreSql >> resultApp
 ```
-## Depois apenas rodar 
+### Depois apenas rodar executar:
 ``` bash  
 python diagram.py
 ```
