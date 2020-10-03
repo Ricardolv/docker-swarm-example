@@ -1,0 +1,96 @@
+
+docker:
+
+docker ps                                                                      - exibe todos os containers em execução no momento.
+docker ps -a                                                                   - exibe todos os containers, independentemente de estarem em execução ou não.
+docker run -it NOME_DA_IMAGEM                                                  - conecta o terminal que estamos utilizando com o do container.
+docker start ID_CONTAINER                                                      - inicia o container com id em questão.
+docker stop ID_CONTAINER                                                       - interrompe o container com id em questão.
+docker start -a -i ID_CONTAINER                                                - inicia o container com id em questão e integra os terminais, além de permitir interação entre ambos.
+docker rm ID_CONTAINER                                                         - remove o container com id em questão.
+docker container prune                                                         - remove todos os containers que estão parados.
+docker rmi NOME_DA_IMAGEM                                                      - remove a imagem passada como parâmetro.
+docker run -d -P --name NOME dockersamples/static-site                         - ao executar, dá um nome ao container.
+docker run -d -p 12345:80 dockersamples/static-site                            - define uma porta específica para ser atribuída à porta 80 do container, neste caso 12345.
+docker run -d -P -e AUTHOR="Fulano" dockersamples/static-site              	   - define uma variável de ambiente AUTHOR com o valor Fulano no container criado.
+
+
+docker run -v "[CAMINHO_VOLUME_LOCAL:]CAMINHO_VOLUME_CONTAINER" NOME_DA_IMAGEM - cria um volume no respectivo caminho do container, caso seja especificado um caminho local monta o volume local no volume do container.
+docker inspect ID_CONTAINER 												   - retorna diversas informações sobre o container.
+
+docker build -f Dockerfile                                                     - cria uma imagem a partir de um Dockerfile.
+docker build -f CAMINHO_DOCKERFILE/Dockerfile -t NOME_USUARIO/NOME_IMAGEM      - constrói e nomeia uma imagem não-oficial informando o caminho para o Dockerfile.
+docker login                                                                   - inicia o processo de login no Docker Hub.
+docker push NOME_USUARIO/NOME_IMAGEM                                           - envia a imagem criada para o Docker Hub.
+docker pull NOME_USUARIO/NOME_IMAGEM                                           - baixa a imagem desejada do Docker Hub.
+
+hostname -i 																   - mostra o ip atribuído ao container pelo docker (funciona apenas dentro do container).
+docker network create --driver bridge NOME_DA_REDE 							   - cria uma rede especificando o driver desejado.
+docker run -it --name NOME_CONTAINER --network NOME_DA_REDE NOME_IMAGEM 	   - cria um container especificando seu nome e qual rede deverá ser usada.
+
+docker run NOME_DA_IMAGEM 													   - cria um container com a respectiva imagem passada como parâmetro.
+docker run -it NOME_DA_IMAGEM 												   - conecta o terminal que estamos utilizando com o do container.
+docker run -d -P --name NOME dockersamples/static-site 						   - ao executar, dá um nome ao container e define uma porta aleatória.
+docker run -d -p 12345:80 dockersamples/static-site 						   - define uma porta específica para ser atribuída à porta 80 do container, neste caso 12345.
+docker run -v "CAMINHO_VOLUME" NOME_DA_IMAGEM 								   - cria um volume no respectivo caminho do container.
+docker run -it --name NOME_CONTAINER --network NOME_DA_REDE NOME_IMAGEM 	   - cria um container especificando seu nome e qual rede deverá ser usada.
+
+
+docker-machine:
+
+docker-machine create -d virtualbox vml    									  - criar uma docker-machine chamada vml 
+docker-machine ssh vml  													  - entrar na docker-machine vm1
+docker swarm init --advertise-addr 192.168.99.100							  - ainda dentro do docker-machine comando que inicia o docker-swarm tranformando ela em manager cluster
+docker swarm join-token worker												  - exibir o comando que adiciona trabalhadores wrokers
+docker node ls																  - dentro do docker swarm manager identificamos as caracteristicas das maquinas de quem sao os works do nosso swarm.
+docker swarm leave															  - dentro da maquina work executamos o comando para dalterarmos o status de ready para dwon possibilitando a remocao do mesmo
+docker node rm chave-work													  - comando que definitivamente remove o work do swarm
+docker node inspect vm2														  - para obter informacoes de ip de uma maquina work exemplo vm2 temos que esta dentro da maquina swarm.
+
+executar no manager -> docker service create -p 8080:3000 aluracursos/barbearia        			  - 
+docker service ls	
+
+backup docker swarm pasta -> /var/lib/docker/swarm	copiar para uma pasta qualquer como backup
+para recriar as configuracoes copiar o backup para pasta var/lib/docker/swarm e rodar o comando -> docker swarm init --force-new-cluster --advertise-addr 192.168.99.100										
+docker swarm join-token manager 											  				- podemos criar outros manager atraves desse comando e associa-lo em outras maquinas assimpodemos ter varios manager
+docker node updae --availability drain hostname-manager
+docker node updae --availability active hostname-manager
+docker service updae --constraint-add node.role==worker id-servico
+docker service update --replicas 4 id-servico 
+
+
+executar no manager modeo global  -> docker service create -p 8080:3000 --mode global aluracursos/barbearia  
+docker service create --name servico --replicas 2 alpine sleep 1d			  									- criano novo servico e gerado dois containeres
+docker network create -d overlay my_overlay									  									- criando nova rede  do tipo overlay
+docker service create --name servico --network my_overlay --replicas 2 alpine sleep 1d                          - criando um novo servico com a nova rede criada my_overlay
+docker network create -d overlay --attachable my_overlay														- conseguiremos conectar tanto serviços como containers "standalone" em nossa rede my_overlay
+
+
+docker stack deploy --compose-file docker-compose.yml															- rodando a composicao dentro do cluster
+
+docker stack rm vote
+
+---
+docker-machine criados:
+
+vmc -> cluster 
+vm-w1 / vm-w2 / vm-w3 -> works
+
+transformando vmc em um cluster:
+
+docker-machine ssh vmc
+docker@vmc:~$ docker swarm init 
+Error response from daemon: could not choose an IP address to advertise since this system has multiple addresses on different interfaces (10.0.2.15 on eth0 and 192.168.99.103 on eth1) - specify one with --advertise-addr
+
+docker@vmc:~$ docker swarm init --advertise-addr 192.168.99.103  
+
+docker@vm-w1:~$ docker swarm join --token SWMTKN-1-0keoucf4kjtlkfhidm5pqhmnsbdyv6rsr7ql1upy0u6vplc2cb-4e5saq33zlev8vld5q638eom1 192.168.99.103:2377
+This node joined a swarm as a worker.
+
+docker@vm-w2:~$ docker swarm join --token SWMTKN-1-0keoucf4kjtlkfhidm5pqhmnsbdyv6rsr7ql1upy0u6vplc2cb-4e5saq33zlev8vld5q638eom1 192.168.99.103:2377
+This node joined a swarm as a worker.
+
+docker@vm-w3:~$ docker swarm join --token SWMTKN-1-0keoucf4kjtlkfhidm5pqhmnsbdyv6rsr7ql1upy0u6vplc2cb-4e5saq33zlev8vld5q638eom1 192.168.99.103:2377
+This node joined a swarm as a worker.
+
+---
